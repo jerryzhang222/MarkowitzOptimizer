@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block content %}
+
+<div class="containerBlock">
+<div class="overlayDiv">
+    <form class="optimizeForm" method="POST" action=""> {% csrf_token %}
+    {{ form.as_p }}
+    <input type ='submit' value='Add Security' name='_add' class='btn'/>
+    <!--<input type ='submit' value='Clear Securities' name='_clear' class='btn'/>-->
+    <input id='btnOptimize' type ='submit' value='Optimize' name='_optimize' class='btn'/>
+    </form>
+    <img class="overlayImage" src="{% static 'img/hourglass.gif' %}" style="margin:auto"/>
+    <p id="overlayText" style="display:none;font-size:10px">This should only take 2 minutes.</p>
+</div>
+
+<div class="portfolioTable">
+    <h3 style="float:left">Current Portfolio</h3>
+    <form action='' method="POST"> {% csrf_token %}
+      <input style="float:right;margin-left:10px;margin-top:21px" type="submit" value="Clear" name="_clear" />
+    </form>
+    <button id="addToggle" style="float:right;margin-top:21px">Add</button>
+    <br><br><br>
+    
+    {% autoescape off %}
+    <form action='' method="POST"> {% csrf_token %}
+    {{ portfolio_table }}
+    </form>
+    {% endautoescape %}
+</div>
+</div>
+
+<script>
+
+$(document).ready(function() {
+    $("#btnOptimize").click(function() {
+               $(".overlayImage").show();
+               $("#overlayText").show();
+    });
+});
+
+    $(function() {
+        $("#stocks").autocomplete({
+            source: "/api/get_stocks/",
+            minLength: 2,
+    });
+});
+</script>
+
+{% if not equalweight_returns %}
+
+<script>
+
+ $(function () {
+     var toggle = 1;
+
+     $('#addToggle').click(function () {
+         if (toggle == 1) {
+             toggle = 0;
+             $('.portfolioTable').animate({
+                 width: '100%'
+             }, 600)
+             $( ".optimizeForm" ).slideToggle();
+         } else {
+             toggle = 1;
+             $('.portfolioTable').animate({
+                 width: '67%'
+             }, 600)
+             $( ".optimizeForm" ).slideToggle();
+         }
+
+
+     });
+
+ });
+</script>
+
+{% endif %}
+
+{% if equalweight_returns %}
+
+<div class="containerBlock">
+<br>
+<br>
+<h3>Optimization Results</h3>
+
+<p style="font-size:17px;font-weight:200">Returns with Equal Distribution of Capital: <strong>{{ equalweight_returns }}</strong>
+<br>Returns with Optimized Distribution of Capital: <strong>{{ optimal_returns }}</strong></p>
+
+</div>
+
+<script>
+$( document ).ready(function() {
+  $('.portfolioTable').animate({
+                 width: '100%'
+             }, 600)
+             $( ".optimizeForm" ).slideToggle();
+});
+ $(function () {
+     var toggle = 0;
+
+     $('#addToggle').click(function () {
+         if (toggle == 1) {
+             toggle = 0;
+             $('.portfolioTable').animate({
+                 width: '100%'
+             }, 600)
+             $( ".optimizeForm" ).slideToggle();
+         } else {
+             toggle = 1;
+             $('.portfolioTable').animate({
+                 width: '50%'
+             }, 600)
+             $( ".optimizeForm" ).slideToggle();
+         }
+
+
+     });
+
+ });
+</script>
+
+{% autoescape off %}
+
+<div class="graphContainerBlock">
+<h4>Increase/Decrease of $100,000 Invested in Optimized Stocks</h4>
+{{ returns_plot }}
+<h4>Relative Returns of Individual Stocks</h4>
+{{ price_plot }}
+<h4>Efficient Frontier Representation at One Time Point</h4>
+<img width=100% src="/images/test.png" />
+</div>
+
+{% endautoescape %}
+
+{% endif %}
+
+{% endblock %}
