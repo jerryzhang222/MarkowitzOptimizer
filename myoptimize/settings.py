@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,7 +27,6 @@ SECRET_KEY = 'cy9av@l4%c#c54g!^-xjqtq%ny0=br(v%egmy-uo%#&1k%-mf8'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -84,6 +84,10 @@ DATABASES = {
     }
 }
 
+#DATABASES['default'] =  dj_database_url.config()
+# Enable Persistent Connections
+DATABASES['default']['CONN_MAX_AGE'] = 500
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -109,6 +113,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static', 'static_root')
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static', 'static_dirs'),    
 )
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'static', 'media')
 
