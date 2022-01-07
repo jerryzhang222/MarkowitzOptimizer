@@ -7,7 +7,7 @@ Cheetah==2.4.4
 cloud-init==0.7.5
 colorama==0.2.5
 configobj==4.7.2
-cvxopt==1.1.8
+cvxopt==1.2.7
 cyordereddict==0.2.2
 Cython==0.22.1
 decorator==3.4.0
