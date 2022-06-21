@@ -44,7 +44,7 @@ mercurial==2.8.2
 mintapi==1.14
 mpld3==0.2
 numexpr==2.4.3
-numpy==1.10.1
+numpy==1.22.0
 oauth==1.0.1
 oauth2==1.9.0.post1
 oauth2client==1.5.2
